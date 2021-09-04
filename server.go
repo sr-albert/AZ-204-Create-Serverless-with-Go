@@ -37,6 +37,8 @@ func httpTriggerHandler(w http.ResponseWriter, r *http.Request) {
   }
 
 
+
+  
 func queueHandler(w http.ResponseWriter, r *http.Request) {
 	// Read the body from incoming response stream and decodes it
 	var invokeRequest InvokeRequest
@@ -45,8 +47,8 @@ func queueHandler(w http.ResponseWriter, r *http.Request) {
 	d.Decode(&invokeRequest)
 
 	// The message itself is dug out with a call to [Unmarshal()]
-	var reqData map[string]interface{}
-	json.Unmarshal(invokeRequest.Data["queueItem"], &reqData)
+	// var reqData map[string]interface{}
+	// json.Unmarshal(invokeRequest.Data["queueItem"], &reqData)
 	
 	var parsedMessage string
 	json.Unmarshal(invokeRequest.Data["queueItem"], &parsedMessage)
@@ -64,10 +66,10 @@ func main() {
 	//The next code instantiates an HTTP server instance:
 	mux := http.NewServeMux()
 	// handle controller
-	mux.HandleFunc("/api/hello", triggerHandler)
+	mux.HandleFunc("/api/hello", triggerHandler)	
+	mux.HandleFunc("/api/httpTrigger", httpTriggerHandler)
 	mux.HandleFunc("/api/queueTrigger", queueHandler)
-	mux.HandleFunc("/api/queueTrigger", queueHandler)
-
+	
 	fmt.Println("Go server Listening on: ", customHandlerPort)
 	// The last line of importance is the one that starts listening to a specific port and signals that it's ready to receive requests
 	log.Fatal(http.ListenAndServe(":"+customHandlerPort, mux))
